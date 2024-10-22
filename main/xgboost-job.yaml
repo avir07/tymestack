@@ -1,0 +1,13 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: xgboost-job
+spec:
+  parallelism: 5  # Number of parallel jobs
+  completions: 5  # Number of total jobs
+  template:
+    spec:
+      containers:
+      - name: xgboost-container
+        image: gcr.io/tymestack-439409/tymestack
+      restartPolicy: Never
