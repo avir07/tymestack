@@ -30,6 +30,6 @@ serviceAccount: projects/tymestack-439409/serviceAccounts/33753718603-compute@de
 
 secrets:
   - secretEnv:
-      GITHUB_TOKEN: projects/tymestack-439409/secrets/tymestack-github1-github-oauthtoken-39fdc6/versions/latest
+      GITHUB_TOKEN: projects/tymestack-439409/secrets/tymestack-github1-github-oauthtoken-39fdc6/versions/1
 
 timeout: 1200s  # Increase timeout if the training takes time
