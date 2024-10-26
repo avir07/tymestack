@@ -2,12 +2,12 @@ steps:
   # Docker Build
   - name: 'gcr.io/cloud-builders/docker'
     args: ['build', '-t',
-           'us-central1-docker.pkg.dev/tymestack-439409/tymestack-github1/tymestackci','-f', 'main/Dockerfile', 'main']
+           'us-central1-docker.pkg.dev/tymestack-439409/tymestack-github/tymestackci','-f', 'main/Dockerfile', 'main']
 
   # Docker Push
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push',
-           'us-central1-docker.pkg.dev/tymestack-439409/tymestack-github1/tymestackci']
+           'us-central1-docker.pkg.dev/tymestack-439409/tymestack-github/tymestackci']
 
 logsBucket: gs://tymestack-bucket
 serviceAccount: projects/tymestack-439409/serviceAccounts/33753718603-compute@developer.gserviceaccount.com
