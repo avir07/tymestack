@@ -27,7 +27,7 @@ steps:
   - name: 'gcr.io/cloud-builders/kubectl'
     env:
       - 'CLOUDSDK_CONTAINER_CLUSTER=tymestack-cluster'
-      - 'CLOUDSDK_COMPUTE_ZONE=[us-central1'
+      - 'CLOUDSDK_COMPUTE_ZONE=us-central1'
       - 'KUBECTL_VERSION=1.30'
     args:
       - 'apply'
