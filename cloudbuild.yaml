@@ -2,7 +2,7 @@ steps:
   # Docker Build
   - name: 'gcr.io/cloud-builders/docker'
     args: ['build', '-t',
-           'us-central1-docker.pkg.dev/tymestack-439409/tymestack-github1/tymestackci',]
+           'us-central1-docker.pkg.dev/tymestack-439409/tymestack-github1/tymestackci']
 
   # Docker Push
   - name: 'gcr.io/cloud-builders/docker'
