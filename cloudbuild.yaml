@@ -9,5 +9,27 @@ steps:
     args: ['push',
            'us-central1-docker.pkg.dev/tymestack-439409/tymestack-github/tymestackci']
 
+  # Set up kubectl to authenticate with the Kubernetes cluster
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: 'gcloud'
+    args:
+      - 'container'
+      - 'clusters'
+      - 'get-credentials'
+      - 'tymestack-cluster'         # Replace with your cluster name
+      - '--zone=us-central1'  # Replace with your cluster zone (e.g., us-central1-a)
+      - '--project=tymestack-439409'
+
+  # Run the Kubernetes job using kubectl
+  - name: 'gcr.io/cloud-builders/kubectl'
+    args:
+      - 'apply'
+      - '-f'
+      - 'xgboost-job-ci.yaml'
+
+
+
+
+
 logsBucket: gs://tymestack-bucket
 serviceAccount: projects/tymestack-439409/serviceAccounts/33753718603-compute@developer.gserviceaccount.com
