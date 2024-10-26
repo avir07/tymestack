@@ -7,7 +7,7 @@ steps:
   # Docker Push
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push',
-           'us-central1-docker.pkg.dev/tymestack-439409/tymestack/tymestackci']
+           'us-central1-docker.pkg.dev/tymestack-439409/tymestack-github/tymestackci']
 
 logsBucket: gs://tymestack-bucket
 serviceAccount: projects/tymestack-439409/serviceAccounts/33753718603-compute@developer.gserviceaccount.com
