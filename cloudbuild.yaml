@@ -34,9 +34,5 @@ steps:
       - '-f'
       - 'main/xgboost-job-ci.yaml'
 
-
-
-
-
 logsBucket: gs://tymestack-bucket
 serviceAccount: projects/tymestack-439409/serviceAccounts/33753718603-compute@developer.gserviceaccount.com
