@@ -32,7 +32,7 @@ steps:
     args:
       - 'apply'
       - '-f'
-      - 'xgboost-job-ci.yaml'
+      - 'main/xgboost-job-ci.yaml'
 
 
 
