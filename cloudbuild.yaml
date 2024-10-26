@@ -4,8 +4,8 @@ steps:
     args:
       - '-c'
       - |
-        echo "Secret Token: $$GITHUB_TOKEN"
-    secretEnv: ['GITHUB_TOKEN']
+        echo "Running git command"
+secretEnv: ['GITHUB_TOKEN']
 
 secrets:
   - secretEnv:
