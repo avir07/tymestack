@@ -33,7 +33,7 @@ steps:
 #images:
 #- 'gcr.io/$PROJECT_ID/my-model'  # Image to deploy
 logsBucket: gs://tymestack-bucket  # Specify your logs bucket here
-options:
-  logging: CLOUD_LOGGING_ONLY  # Optional, if you want to use Cloud Logging only
+#options:
+#  logging: CLOUD_LOGGING_ONLY  # Optional, if you want to use Cloud Logging only
 serviceAccount: projects/tymestack-439409/serviceAccounts/33753718603-compute@developer.gserviceaccount.com
 timeout: 1200s  # Increase timeout if the training takes time
