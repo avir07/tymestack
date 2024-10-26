@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: xgboost-job
+  name: xgboost-job-ci
 spec:
   parallelism: 1  # Number of parallel jobs
   completions: 1  # Number of total jobs
@@ -10,6 +10,6 @@ spec:
       serviceAccountName: ksa
       containers:
       - name: xgboost-container
-        image: gcr.io/tymestack-439409/tymestack-github
+        image: gcr.io/tymestack-439409/tymestack-github:latest
         imagePullPolicy: Always
       restartPolicy: Never
