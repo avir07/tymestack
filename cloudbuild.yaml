@@ -13,7 +13,8 @@ steps:
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     env:
       - 'CLOUDSDK_CONTAINER_CLUSTER=tymestack-cluster'        # Replace with your cluster name
-      - 'CLOUDSDK_COMPUTE_ZONE=us-central1'             # Replace with your cluster zone, e.g., us-central1-a
+      - 'CLOUDSDK_COMPUTE_ZONE=us-central1'
+      - 'KUBECTL_VERSION=1.29'
     entrypoint: 'gcloud'
     args:
       - 'container'
@@ -24,6 +25,8 @@ steps:
 
   # Run the Kubernetes job using kubectl
   - name: 'gcr.io/cloud-builders/kubectl'
+    env:
+      - 'KUBECTL_VERSION=1.29'
     args:
       - 'apply'
       - '-f'
