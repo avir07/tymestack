@@ -17,29 +17,15 @@ steps:
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'gcr.io/tymestack-439409/tymestack']
 
-  # Step 4: Run tests (assumes pytest is installed in the Docker image)
-  #- name: 'python:3.9'  # Replace with your Python version
-  #  entrypoint: 'bash'
-  #  args:
-  #    - '-c'
-  #    - |
-  #      best_model_pipeline2.py  # Run the test script
-
-  # Step 5: Deploy the model if tests pass
+  # Step 4: Deploy the model if tests pass
   - name: 'gcr.io/cloud-builders/kubectl'
     args:
       - 'apply'
       - '-f'
-      - 'xgboost-job.yaml'  # Or other yaml file to deploy
-
-  ## Step 6: Notify success (optional)
-  #- name: 'gcr.io/cloud-builders/gcloud'
-  #  args: ['pubsub', 'topics', 'publish', 'build-notifications', '--message', 'Build successful!']
+      - 'xgboost-job.yaml'
 
 # Specify your logs bucket here
 logsBucket: gs://tymestack-bucket
-# options:
-#  logging: CLOUD_LOGGING_ONLY  # Optional, if you want to use Cloud Logging only
 serviceAccount: projects/tymestack-439409/serviceAccounts/33753718603-compute@developer.gserviceaccount.com
 
 secrets:
