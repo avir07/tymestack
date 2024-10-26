@@ -1,0 +1,36 @@
+steps:
+# Step 1: Pull code from the repository
+- name: 'gcr.io/cloud-builders/git'
+  args: ['clone', 'https://source.developers.google.com/p/tymestack/r/tymestack-github']
+
+# Step 2: Build the Docker image
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'gcr.io/tymestack-439409/tymestack', '.']
+
+# Step 3: Push Docker image to Google Container Registry (GCR)
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'gcr.io/tymestack-439409/tymestack']
+
+## Step 4: Run tests (assumes pytest is installed in the Docker image) :
+#- name: 'python:3.9'  # Replace with your Python version
+#  entrypoint: 'bash'
+#  args:
+#    - '-c'
+#    - |
+#      best_model_pipeline2.py  # Run the test script
+
+# Step 5: Deploy the model if tests pass
+- name: 'gcr.io/cloud-builders/kubectl'
+  args:
+    - 'apply'
+    - '-f'
+    - 'xgboost-job.yaml'  # Or other yaml file to deploy
+
+## Step 6: Notify success (optional)
+#- name: 'gcr.io/cloud-builders/gcloud'
+#  args: ['pubsub', 'topics', 'publish', 'build-notifications', '--message', 'Build successful!']
+#
+#images:
+#- 'gcr.io/$PROJECT_ID/my-model'  # Image to deploy
+
+timeout: 1200s  # Increase timeout if the training takes time

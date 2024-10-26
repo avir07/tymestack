@@ -3,3 +3,6 @@ scikit-learn
 pandas
 argparse
 numpy
+joblib
+google-cloud-storage
+google-cloud-aiplatform

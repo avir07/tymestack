@@ -9,7 +9,8 @@ COPY requirements.txt requirements.txt
 RUN pip install -r requirements.txt
 
 # Copy the script into the container
+COPY best_model_pipeline2.py best_model_pipeline2.py
 COPY train_model.py train_model.py
 
 # Define the command to run your script
-CMD ["python", "train_model.py"]
+CMD ["python", "best_model_pipeline2.py"]

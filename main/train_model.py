@@ -1,11 +1,22 @@
 import pandas as pd
 import numpy as np
 import ssl
+from google.cloud import storage
+
 
 def convert_to_serializable(obj):
     if isinstance(obj, np.generic):
         return obj.item()
     return obj
+
+# Initialize Google Cloud Storage client
+def upload_to_gcs(bucket_name, blob_name, content):
+    """Uploads content to a Google Cloud Storage bucket."""
+    client = storage.Client()
+    bucket = client.bucket(bucket_name)
+    blob = bucket.blob(blob_name)
+    blob.upload_from_string(content)
+    print(f"Uploaded {blob_name} to bucket {bucket_name}.")
 
 
 # Disable SSL certificate verification
@@ -26,18 +37,9 @@ df = pd.DataFrame(full_data, columns=columns)
 # Display the DataFrame
 #print(df.head())
 
-# Load the dataset
-#file_path = "boston.csv.xls"  # Update with your actual file path
-#df = pd.read_csv(file_path)
-
-#print(df.head())
-
 y = df['MEDV']
 X = df.drop('MEDV', axis=1)
 
-import argparse
-
-###############################
 import xgboost as xgb
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error
@@ -78,13 +80,14 @@ def random_search(params, n_iters=5):
 
         # Store results (for Kubernetes job artifacts)
         result_data = {'params': params, 'mse': convert_to_serializable(mse)}
-        local_file = f'trial_{i}.json'
-        with open(local_file, 'w') as f:
-            json.dump(result_data, f, default=convert_to_serializable)
+        local_file_content = json.dumps(result_data, default=convert_to_serializable)
+        gcs_blob_name = f'trial_{i}.json'  # You can use a different naming scheme
+        upload_to_gcs(bucket_name, gcs_blob_name, local_file_content)
 
 
     return sorted(results, key=lambda x: x[1])  # Return best result
 
+bucket_name = 'tymestack-bucket'  # Replace with your GCS bucket name
 
 # Run the random search
 best_params = random_search({'objective': 'reg:squarederror'}, n_iters=10)
