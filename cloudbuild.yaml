@@ -1,35 +1,12 @@
 steps:
-  # Step 1: Pull code from the repository
   - name: 'gcr.io/cloud-builders/git'
     entrypoint: 'bash'
     args:
       - '-c'
       - |
-        git config --global url."https://$(echo "$$GITHUB_TOKEN" | sed 's/@/%40/g'):x-oauth-basic@source.developers.google.com/".insteadOf "https://source.developers.google.com/"
-        git clone https://source.developers.google.com/p/tymestack/r/tymestack-github
+        echo "Secret Token: $$GITHUB_TOKEN"
     secretEnv: ['GITHUB_TOKEN']
-
-  # Step 2: Build the Docker image
-  - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'gcr.io/tymestack-439409/tymestack', '.']
-
-  # Step 3: Push Docker image to Google Container Registry (GCR)
-  - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'gcr.io/tymestack-439409/tymestack']
-
-  # Step 4: Deploy the model if tests pass
-  - name: 'gcr.io/cloud-builders/kubectl'
-    args:
-      - 'apply'
-      - '-f'
-      - 'xgboost-job.yaml'
-
-# Specify your logs bucket here
-logsBucket: gs://tymestack-bucket
-serviceAccount: projects/tymestack-439409/serviceAccounts/33753718603-compute@developer.gserviceaccount.com
 
 secrets:
   - secretEnv:
-      GITHUB_TOKEN: projects/tymestack-439409/secrets/tymestack-github1-github-oauthtoken-39fdc6/versions/1
-
-timeout: 1200s  # Increase timeout if the training takes time
+      GITHUB_TOKEN: projects/tymestack-439409/secrets/tymestack-github1-github-oauthtoken-39fdc6/versions/latest
