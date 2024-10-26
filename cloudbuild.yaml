@@ -1,12 +1,11 @@
 steps:
-  - name: 'gcr.io/cloud-builders/git'
-    entrypoint: 'bash'
-    args:
-      - '-c'
-      - |
-        echo "Running git command"
-secretEnv: ['GITHUB_TOKEN']
+  # Docker Build
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t',
+           'us-central1-docker.pkg.dev/tymestack-439409/tymestack-github/tymestack',
+           '.']
 
-secrets:
-  - secretEnv:
-      GITHUB_TOKEN: projects/tymestack-439409/secrets/tymestack-github1-github-oauthtoken-39fdc6/versions/latest
+  # Docker Push
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push',
+           'us-central1-docker.pkg.dev/tymestack-439409/tymestack-github/tymestack']
