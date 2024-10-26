@@ -26,6 +26,8 @@ steps:
   # Run the Kubernetes job using kubectl
   - name: 'gcr.io/cloud-builders/kubectl'
     env:
+      - 'CLOUDSDK_CONTAINER_CLUSTER=tymestack-cluster'
+      - 'CLOUDSDK_COMPUTE_ZONE=[us-central1'
       - 'KUBECTL_VERSION=1.30.5-gke.1014001'
     args:
       - 'apply'
