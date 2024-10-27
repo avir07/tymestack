@@ -3,8 +3,8 @@ kind: Job
 metadata:
   name: xgboost-job
 spec:
-  parallelism: 1
-  completions: 1
+  parallelism: 5
+  completions: 5
   template:
     spec:
       serviceAccountName: ksa    # kubernetes service account created and then annoted to google service account
