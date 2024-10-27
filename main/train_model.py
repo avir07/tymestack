@@ -66,11 +66,11 @@ df = pd.DataFrame(full_data, columns=columns)
 # Splitting into training and validation set
 y = df['MEDV']
 X = df.drop('MEDV', axis=1)
-X_train, X_valid, y_train, y_valid = train_test_split(X, y, test_size=0.2, random_state=42)
+X_train, X_valid, y_train, y_valid = train_test_split(X, y, test_size=0.4, random_state=42)
 
 # Define hyperparameters grid for tuning
 param_grid = {
-    'n_estimators': [100, 150],
+    'n_estimators': [100, 200],
     'max_depth': [3, 6],
     'learning_rate': [0.01, 0.1],
     'subsample': [0.8, 1]
