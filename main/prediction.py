@@ -47,3 +47,4 @@ existing_model = download_model_from_gcs(bucket_name)
 sampled_rows = X_valid.sample(n=3, random_state=42)
 prediction_rows = existing_model.get_booster().predict(xgb.DMatrix(sampled_rows))
 
+print(prediction_rows)

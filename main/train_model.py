@@ -70,7 +70,7 @@ X_train, X_valid, y_train, y_valid = train_test_split(X, y, test_size=0.2, rando
 
 # Define hyperparameters grid for tuning
 param_grid = {
-    'n_estimators': [100, 200],
+    'n_estimators': [100, 150],
     'max_depth': [3, 6],
     'learning_rate': [0.01, 0.1],
     'subsample': [0.8, 1]
