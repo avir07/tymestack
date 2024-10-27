@@ -63,7 +63,7 @@ def upload_model_to_gcs(bucket_name, model_file_path):
 df = train_model.df
 y = df['MEDV']
 X = df.drop('MEDV', axis=1)
-X_train, X_valid, y_train, y_valid = train_test_split(X, y, test_size=0.4, random_state=42)
+X_train, X_valid, y_train, y_valid = train_test_split(X, y, test_size=0.9, random_state=42)
 bucket_name = 'tymestack-bucket'
 
 # Train the final model with the best hyperparameters and evaluating MSE
