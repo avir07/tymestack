@@ -1,17 +1,23 @@
 import pandas as pd
-import numpy as np
 import ssl
 from google.cloud import storage
+import xgboost as xgb
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import mean_squared_error
+import numpy as np
+import json
 
 
 def convert_to_serializable(obj):
+    """conversion from numPy datatypes to python datatypes"""
     if isinstance(obj, np.generic):
         return obj.item()
     return obj
 
-# Initialize Google Cloud Storage client
+
 def upload_to_gcs(bucket_name, blob_name, content):
     """Uploads content to a Google Cloud Storage bucket."""
+    # Initialize Google Cloud Storage client
     client = storage.Client()
     bucket = client.bucket(bucket_name)
     blob = bucket.blob(blob_name)
@@ -19,49 +25,9 @@ def upload_to_gcs(bucket_name, blob_name, content):
     print(f"Uploaded {blob_name} to bucket {bucket_name}.")
 
 
-# Disable SSL certificate verification
-ssl._create_default_https_context = ssl._create_unverified_context
-
-data_url = "http://lib.stat.cmu.edu/datasets/boston"
-raw_df = pd.read_csv(data_url, sep="\s+", skiprows=22, header=None)
-data = np.hstack([raw_df.values[::2, :], raw_df.values[1::2, :2]])
-target = raw_df.values[1::2, 2]
-
-
-full_data = np.column_stack((data, target))
-
-# Create a DataFrame with the desired column names
-columns = ['CRIM', 'ZN', 'INDUS', 'CHAS', 'NOX', 'RM', 'AGE', 'DIS', 'RAD', 'TAX', 'PTRATIO', 'B', 'LSTAT', 'MEDV']
-df = pd.DataFrame(full_data, columns=columns)
-
-# Display the DataFrame
-#print(df.head())
-
-y = df['MEDV']
-X = df.drop('MEDV', axis=1)
-
-import xgboost as xgb
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import mean_squared_error
-import numpy as np
-import json
-
-# Load your data (replace with your dataset)
-
-# Split into training and validation set
-X_train, X_valid, y_train, y_valid = train_test_split(X, y, test_size=0.2, random_state=42)
-
-# Define parameter grid for tuning
-param_grid = {
-    'n_estimators': [100, 200],
-    'max_depth': [3, 6],
-    'learning_rate': [0.01, 0.1],
-    'subsample': [0.8, 1]
-}
-
-
-# Random search for hyperparameters
 def random_search(params, n_iters=5):
+    """Random search for hyperparameters, which are then used to train model"""
+
     results = []
     for i in range(n_iters):
         params['n_estimators'] = np.random.choice(param_grid['n_estimators'])
@@ -84,13 +50,33 @@ def random_search(params, n_iters=5):
         gcs_blob_name = f'trial_{i}.json'  # You can use a different naming scheme
         upload_to_gcs(bucket_name, gcs_blob_name, local_file_content)
 
-
     return sorted(results, key=lambda x: x[1])  # Return best result
 
-bucket_name = 'tymestack-bucket'  # Replace with your GCS bucket name
 
-# Run the random search
+# Loading dataset, SSL used
+ssl._create_default_https_context = ssl._create_unverified_context
+data_url = "http://lib.stat.cmu.edu/datasets/boston"
+raw_df = pd.read_csv(data_url, sep="\s+", skiprows=22, header=None)
+data = np.hstack([raw_df.values[::2, :], raw_df.values[1::2, :2]])
+target = raw_df.values[1::2, 2]
+full_data = np.column_stack((data, target))
+columns = ['CRIM', 'ZN', 'INDUS', 'CHAS', 'NOX', 'RM', 'AGE', 'DIS', 'RAD', 'TAX', 'PTRATIO', 'B', 'LSTAT', 'MEDV']
+df = pd.DataFrame(full_data, columns=columns)
+
+# Splitting into training and validation set
+y = df['MEDV']
+X = df.drop('MEDV', axis=1)
+X_train, X_valid, y_train, y_valid = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Define hyperparameters grid for tuning
+param_grid = {
+    'n_estimators': [100, 200],
+    'max_depth': [3, 6],
+    'learning_rate': [0.01, 0.1],
+    'subsample': [0.8, 1]
+}
+
+bucket_name = 'tymestack-bucket'
 best_params = random_search({'objective': 'reg:squarederror'}, n_iters=10)
 print(f"Best Parameters: {best_params[0]}")
-##############################################################################
 

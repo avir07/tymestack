@@ -3,11 +3,11 @@ kind: Job
 metadata:
   name: xgboost-job-ci
 spec:
-  parallelism: 1  # Number of parallel jobs
-  completions: 1  # Number of total jobs
+  parallelism: 1
+  completions: 1
   template:
     spec:
-      serviceAccountName: ksa
+      serviceAccountName: ksa  # kubernetes service account created and then annoted to google service account
       containers:
       - name: xgboost-container
         image: us-central1-docker.pkg.dev/tymestack-439409/tymestack-github/tymestackci:latest

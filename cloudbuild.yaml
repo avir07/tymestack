@@ -1,18 +1,18 @@
 steps:
-  # Docker Build
+  # 1. Docker Build
   - name: 'gcr.io/cloud-builders/docker'
     args: ['build', '-t',
            'us-central1-docker.pkg.dev/tymestack-439409/tymestack-github/tymestackci','-f', 'main/Dockerfile', 'main']
 
-  # Docker Push
+  # 2. Docker Push
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push',
            'us-central1-docker.pkg.dev/tymestack-439409/tymestack-github/tymestackci']
 
-  # Set environment variables for the Kubernetes cluster
+  # 3. Set environment variables for the Kubernetes cluster
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     env:
-      - 'CLOUDSDK_CONTAINER_CLUSTER=tymestack-cluster'        # Replace with your cluster name
+      - 'CLOUDSDK_CONTAINER_CLUSTER=tymestack-cluster'
       - 'CLOUDSDK_COMPUTE_ZONE=us-central1'
       - 'KUBECTL_VERSION=1.30'
     entrypoint: 'gcloud'
@@ -20,10 +20,10 @@ steps:
       - 'container'
       - 'clusters'
       - 'get-credentials'
-      - 'tymestack-cluster'                                   # Replace with your cluster name
-      - '--zone=us-central1'                            # Replace with your cluster zone
+      - 'tymestack-cluster'
+      - '--zone=us-central1'
 
-  # Run the Kubernetes job using kubectl
+  # 4. Run the Kubernetes job using kubectl
   - name: 'gcr.io/cloud-builders/kubectl'
     env:
       - 'CLOUDSDK_CONTAINER_CLUSTER=tymestack-cluster'
